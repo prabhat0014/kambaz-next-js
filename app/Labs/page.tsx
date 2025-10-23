@@ -1,28 +1,23 @@
-export default function Modules() {
+import Link from "next/link";
+export default function Labs() {
   return (
-    <div>
-      {/* Implement Collapse All button, View Progress button, etc.
-       */}
-      <ul id="wd-modules">
-        <li className="wd-module">
-          <div className="wd-title">Week 1</div>
-          <ul className="wd-lessons">
-            <li className="wd-lesson">
-              <span className="wd-title">LEARNING OBJECTIVES</span>
-              <ul className="wd-content">
-                <li className="wd-content-item">Introduction to the course</li>
-                <li className="wd-content-item">
-                  Learn what is Web Development
-                </li>
-              </ul>
-            </li>
-          </ul>
+    <div id="wd-labs">
+      <h1>Labs</h1>
+      <ul>
+        <li>
+          <Link href="/Labs/Lab1" id="wd-lab1-link">
+            Lab 1: HTML Examples
+          </Link>
         </li>
-        <li className="wd-module">
-          <div className="wd-title">Week 2</div>
+        <li>
+          <Link href="/Labs/Lab2" id="wd-lab2-link">
+            Lab 2: CSS Basics
+          </Link>
         </li>
-        <li className="wd-module">
-          <div className="wd-title">Week 3</div>
+        <li>
+          <Link href="/Labs/Lab3" id="wd-lab3-link">
+            Lab 3: JavaScript Fundamentals
+          </Link>
         </li>
       </ul>
     </div>
