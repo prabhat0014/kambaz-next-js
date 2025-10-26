@@ -8,7 +8,7 @@ export default function AssignmentControlButtons() {
       <span>
         <FormLabel
           style={{ right: "50px", width: "130px", top: "-5px" }}
-          className="position-absolute wd-assignment-percentage rounded-4 fs-5 p-1"
+          className="position-absolute wd-assignment-percentage border rounded-4 fs-5 p-1"
         >
           40% of Total
         </FormLabel>

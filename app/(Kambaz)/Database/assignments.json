@@ -1,0 +1,218 @@
+[
+  {
+    "_id": "A101",
+    "title": "Propulsion Assignment",
+    "course": "RS101",
+    "dueDate": "2025-05-14T14:00:00",
+    "startDate": "2025-05-12T09:00:00",
+    "points": 100,
+    "description": "Analyze the key principles of propulsion and design calculations for a jet engine."
+  },
+  {
+    "_id": "A102",
+    "title": "Combustion Analysis",
+    "course": "RS101",
+    "dueDate": "2025-05-15T23:00:00",
+    "startDate": "2025-05-13T10:00:00",
+    "points": 100,
+    "description": "Study the combustion process and assess the efficiency of different fuel types."
+  },
+  {
+    "_id": "A103",
+    "title": "Nozzle Design Project",
+    "course": "RS101",
+    "dueDate": "2025-05-12T09:00:00",
+    "startDate": "2025-05-10T11:30:00",
+    "points": 100,
+    "description": "Design and test a nozzle for optimizing thrust in aerospace applications."
+  },
+  {
+    "_id": "A201",
+    "title": "Aerodynamics Quiz",
+    "course": "RS102",
+    "dueDate": "2025-05-14T16:30:00",
+    "startDate": "2025-05-12T14:00:00",
+    "points": 100,
+    "description": "A quiz covering fundamental aerodynamic principles and their real-world applications."
+  },
+  {
+    "_id": "A202",
+    "title": "Flow Analysis",
+    "course": "RS102",
+    "dueDate": "2025-05-15T20:00:00",
+    "startDate": "2025-05-13T13:00:00",
+    "points": 100,
+    "description": "Study fluid dynamics and analyze the behavior of air over different surfaces."
+  },
+  {
+    "_id": "A203",
+    "title": "Heating Analysis",
+    "course": "RS102",
+    "dueDate": "2025-05-13T10:30:00",
+    "startDate": "2025-05-11T09:30:00",
+    "points": 100,
+    "description": "Examine heat transfer processes and their application in various engineering fields."
+  },
+  {
+    "_id": "A301",
+    "title": "Structural Design Task",
+    "course": "RS103",
+    "dueDate": "2025-05-12T15:00:00",
+    "startDate": "2025-05-10T10:00:00",
+    "points": 100,
+    "description": "Design and analyze the structural integrity of materials under stress."
+  },
+  {
+    "_id": "A302",
+    "title": "Orbital Calculations",
+    "course": "RS103",
+    "dueDate": "2025-05-14T17:00:00",
+    "startDate": "2025-05-12T12:30:00",
+    "points": 100,
+    "description": "Apply Kepler’s laws to calculate the orbits of satellites and other celestial bodies."
+  },
+  {
+    "_id": "A303",
+    "title": "Systems Engineering Exam",
+    "course": "RS103",
+    "dueDate": "2025-05-13T12:00:00",
+    "startDate": "2025-05-11T14:00:00",
+    "points": 100,
+    "description": "Test your understanding of systems engineering, including optimization and integration."
+  },
+  {
+    "_id": "A401",
+    "title": "Hydrocarbons Identification",
+    "course": "RS104",
+    "dueDate": "2025-05-14T23:00:00",
+    "startDate": "2025-05-12T08:00:00",
+    "points": 100,
+    "description": "Identify and categorize various hydrocarbons used in chemical reactions."
+  },
+  {
+    "_id": "A402",
+    "title": "Spectroscopy Techniques",
+    "course": "RS104",
+    "dueDate": "2025-05-12T19:00:00",
+    "startDate": "2025-05-10T15:30:00",
+    "points": 100,
+    "description": "Study the principles and applications of spectroscopy for chemical analysis."
+  },
+  {
+    "_id": "A403",
+    "title": "Synthesis Reactions",
+    "course": "RS104",
+    "dueDate": "2025-05-15T09:30:00",
+    "startDate": "2025-05-13T12:00:00",
+    "points": 100,
+    "description": "Explore various synthesis reactions and their importance in industrial chemistry."
+  },
+  {
+    "_id": "A501",
+    "title": "Crystal Field Theory",
+    "course": "RS105",
+    "dueDate": "2025-05-12T17:00:00",
+    "startDate": "2025-05-10T16:00:00",
+    "points": 100,
+    "description": "Study the crystal field theory to understand the behavior of transition metal complexes."
+  },
+  {
+    "_id": "A502",
+    "title": "Metal Complexes Identification",
+    "course": "RS105",
+    "dueDate": "2025-05-14T14:00:00",
+    "startDate": "2025-05-12T13:00:00",
+    "points": 100,
+    "description": "Identify and characterize metal complexes using various chemical methods."
+  },
+  {
+    "_id": "A503",
+    "title": "Catalysis Mechanisms",
+    "course": "RS105",
+    "dueDate": "2025-05-13T11:30:00",
+    "startDate": "2025-05-11T10:00:00",
+    "points": 100,
+    "description": "Explore the different mechanisms of catalysis in chemical reactions and their applications."
+  },
+  {
+    "_id": "A601",
+    "title": "Thermodynamics of Reactions",
+    "course": "RS106",
+    "dueDate": "2025-05-13T13:00:00",
+    "startDate": "2025-05-11T12:00:00",
+    "points": 100,
+    "description": "Analyze the thermodynamic principles governing chemical reactions and energy changes."
+  },
+  {
+    "_id": "A602",
+    "title": "Quantum Mechanics Applications",
+    "course": "RS106",
+    "dueDate": "2025-05-15T10:00:00",
+    "startDate": "2025-05-13T14:00:00",
+    "points": 100,
+    "description": "Apply quantum mechanics to understand atomic and molecular behavior in different scenarios."
+  },
+  {
+    "_id": "A603",
+    "title": "Kinetics of Molecular Reactions",
+    "course": "RS106",
+    "dueDate": "2025-05-14T18:00:00",
+    "startDate": "2025-05-12T15:30:00",
+    "points": 100,
+    "description": "Study the rates of molecular reactions and their dependency on various factors."
+  },
+  {
+    "_id": "A701",
+    "title": "Sindarin Grammar Quiz",
+    "course": "RS107",
+    "dueDate": "2025-05-15T16:00:00",
+    "startDate": "2025-05-13T13:30:00",
+    "points": 100,
+    "description": "Test your knowledge of Sindarin grammar rules and sentence structure."
+  },
+  {
+    "_id": "A702",
+    "title": "Khuzdul Script Analysis",
+    "course": "RS107",
+    "dueDate": "2025-05-12T15:30:00",
+    "startDate": "2025-05-10T13:00:00",
+    "points": 100,
+    "description": "Analyze the structure and nuances of the ancient Khuzdul script."
+  },
+  {
+    "_id": "A703",
+    "title": "Middle-earth Language History",
+    "course": "RS107",
+    "dueDate": "2025-05-14T09:00:00",
+    "startDate": "2025-05-12T18:00:00",
+    "points": 100,
+    "description": "Study the development of languages in Middle-earth, focusing on cultural and phonetic evolution."
+  },
+  {
+    "_id": "A801",
+    "title": "Council of Elrond Case Study",
+    "course": "RS108",
+    "dueDate": "2025-05-12T14:30:00",
+    "startDate": "2025-05-10T09:00:00",
+    "points": 100,
+    "description": "Analyze the diplomatic and strategic decisions made during the Council of Elrond meeting."
+  },
+  {
+    "_id": "A802",
+    "title": "Diplomatic Relations in Middle-earth",
+    "course": "RS108",
+    "dueDate": "2025-05-15T20:00:00",
+    "startDate": "2025-05-13T10:30:00",
+    "points": 100,
+    "description": "Examine alliances, treaties, and conflicts among races and kingdoms of Middle-earth."
+  },
+  {
+    "_id": "A803",
+    "title": "War of the Ring Analysis",
+    "course": "RS108",
+    "dueDate": "2025-05-13T19:30:00",
+    "startDate": "2025-05-11T13:00:00",
+    "points": 100,
+    "description": "Assess key battles, leadership strategies, and outcomes of the War of the Ring."
+  }
+]

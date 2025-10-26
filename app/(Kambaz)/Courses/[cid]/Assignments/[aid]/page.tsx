@@ -1,3 +1,4 @@
+"use client";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -6,15 +7,19 @@ import FormControl from "react-bootstrap/FormControl";
 import FormSelect from "react-bootstrap/FormSelect";
 import FormCheck from "react-bootstrap/FormCheck";
 import Button from "react-bootstrap/Button";
+import { useParams } from "next/navigation";
+import * as db from "../../../../Database";
 
 export default function AssignmentEditor() {
+  const {aid} = useParams();
+  const thisAssignment = db.assignments.filter((assignment) => assignment._id === aid)[0];
   return (
     <div id="wd-assignments-editor">
       <Form>
         <FormLabel htmlFor="wd-name"> Assignment Name </FormLabel>
         <Row className="mb-3">
           <Col>
-            <FormControl id="wd-name" defaultValue="A1 - ENV + HTML" />
+            <FormControl id="wd-name" defaultValue={thisAssignment.title} />
           </Col>
         </Row>
         <Row className="mb-3">
@@ -23,14 +28,7 @@ export default function AssignmentEditor() {
               id="wd-description"
               as="textarea"
               rows={10}
-              defaultValue="The assignment is available online
-                                                Submit a link to the landing page of your Web application running on Netlify.
-                                                The landing page should include the following:
-                                                Your full name and section
-                                                Links to each of the lab assignments
-                                                Link to the Kanbas application
-                                                Links to all relevant source code repositories
-                                                The Kanbas application should include a link to navigate back to the landing page."
+              defaultValue={thisAssignment.description}
             />
           </Col>
         </Row>
@@ -39,7 +37,7 @@ export default function AssignmentEditor() {
             Points
           </FormLabel>
           <Col sm={10}>
-            <FormControl id="wd-points" type="number" defaultValue={100} />
+            <FormControl id="wd-points" type="number" defaultValue={thisAssignment.points} />
           </Col>
         </Row>
         <Row className="mb-0">
@@ -147,8 +145,8 @@ export default function AssignmentEditor() {
               </FormLabel>
               <FormControl
                 id="wd-due-date"
-                type="date"
-                defaultValue="2024-05-13"
+                type="datetime-local"
+                defaultValue={thisAssignment.dueDate}
                 className="mb-2"
               />
               <Row>
@@ -158,8 +156,8 @@ export default function AssignmentEditor() {
                   </FormLabel>
                   <FormControl
                     id="wd-available-from"
-                    type="date"
-                    defaultValue="2024-05-06"
+                    type="datetime-local"
+                    defaultValue={thisAssignment.startDate}
                   />
                 </Col>
                 <Col xs={6}>
@@ -168,8 +166,7 @@ export default function AssignmentEditor() {
                   </FormLabel>
                   <FormControl
                     id="wd-available-until"
-                    type="date"
-                    defaultValue=""
+                    type="datetime-local"
                   />
                 </Col>
               </Row>
@@ -184,6 +181,8 @@ export default function AssignmentEditor() {
           size="sm"
           className="me-1 float-end"
           id="wd-save-btn"
+          as="a"
+          href={`/Courses/${thisAssignment.course}/Assignments`}
         >
           Save
         </Button>
@@ -192,6 +191,8 @@ export default function AssignmentEditor() {
           size="sm"
           className="me-1 float-end"
           id="wd-cancel-btn"
+          as="a"
+          href={`/Courses/${thisAssignment.course}/Assignments`}
         >
           Cancel
         </Button>
