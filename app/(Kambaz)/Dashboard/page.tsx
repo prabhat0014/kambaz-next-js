@@ -3,7 +3,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
 import { addNewCourse, deleteCourse, updateCourse, enrollCourse, unenrollCourse } from "../Courses/reducer";
-import * as db from "../Database";
 import FacultyRoute from "../Account/FacultyRoute";
 import {
   Row,
@@ -22,7 +21,7 @@ export default function Dashboard() {
           .filter((course) => 
             enrollments.some((enrollment: any) => 
               currentUser &&
-              enrollment.user === currentUser._id &&
+              enrollment.user === (currentUser as any)?._id &&
               enrollment.course === course._id
             )
           )
@@ -32,12 +31,6 @@ export default function Dashboard() {
     image: "/images/reactjs.jpg", description: "New Description"
   });
   const [showEnrolled, setShowEnrolled] = useState(true);
-  const enrolledCourses = courses.filter((course: any) =>
-    enrollments.some(
-      (enrollment: any) =>
-        enrollment.user === (currentUser as any)?._id &&
-        enrollment.course === course._id
-    ));
   const isEnrolled = (courseId: any) => {
     return userEnrollements.some((course: any) =>
       course._id === courseId
