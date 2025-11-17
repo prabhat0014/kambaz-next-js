@@ -1,10 +1,9 @@
+"use client";
 import Link from "next/link";
 export default function Labs() {
   return (
     <div id="wd-labs">
-      <h3>
-        Sai Prabhat Peddi
-      </h3>
+      <h3>Sai Prabhat Peddi</h3>
       <h1>Labs</h1>
       <ul>
         <li>
@@ -20,6 +19,11 @@ export default function Labs() {
         <li>
           <Link href="/Labs/Lab3" id="wd-lab3-link">
             Lab 3: JavaScript Fundamentals
+          </Link>
+        </li>
+        <li>
+          <Link href="/Labs/Lab4" id="wd-lab4-link">
+            Lab 4: Redux
           </Link>
         </li>
       </ul>

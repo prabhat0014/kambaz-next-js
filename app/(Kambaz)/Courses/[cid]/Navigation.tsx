@@ -19,6 +19,7 @@ export default function CourseNavigation() {
     <div id="wd-courses-navigation" className="wd list-group fs-5 rounded-0">
       {links.map((link) => (
         <Link
+          key={link.label}
           id={`wd-course-${link.label.toLowerCase()}-link`}
           href={`/Courses/${cid}/${link.path}`}
           className={`list-group-item border-0 ${
