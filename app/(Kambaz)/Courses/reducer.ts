@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 const initialState = {
     courses: courses,
     enrollments: enrollments,
+    userEnrollments: [],
 };
 const coursesSlice = createSlice({
     name: "courses",
@@ -33,6 +34,12 @@ const coursesSlice = createSlice({
                 c._id === course._id ? course : c
             ) as any;
         },
+        setCourses: (state, { payload: courses }) => {
+            state.courses = courses;
+        },
+        setEnrollements: (state, { payload: enrolledCourses }) => {
+            state.userEnrollments = enrolledCourses;
+        },
         enrollCourse: (state, { payload: { userId, courseId } }) => {
             const newEnrollment: any = {
                 _id: uuidv4(),
@@ -48,6 +55,6 @@ const coursesSlice = createSlice({
         },
     },
 });
-export const { addNewCourse, deleteCourse, updateCourse, enrollCourse, unenrollCourse } =
+export const { addNewCourse, deleteCourse, updateCourse, enrollCourse, unenrollCourse, setCourses, setEnrollements } =
     coursesSlice.actions;
 export default coursesSlice.reducer;
