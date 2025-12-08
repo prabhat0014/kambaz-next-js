@@ -6,7 +6,7 @@ import ModuleControlButtons from "./ModuleControlButtons";
 import { BsGripVertical } from "react-icons/bs";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { addModule, deleteModule, editModule, updateModule, setModules } from "./reducer";
+import { addModule, editModule, updateModule, setModules } from "./reducer";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../store";
 import * as client from "../../client";
