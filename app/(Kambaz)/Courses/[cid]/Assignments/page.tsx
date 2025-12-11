@@ -1,9 +1,10 @@
 "use client";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteAssignment } from "./reducer";
+import { setAssignments } from "./reducer";
+import * as client from "../../client";
 
 import { BsGripVertical } from "react-icons/bs";
 import {
@@ -28,7 +29,6 @@ import { FaTrash } from "react-icons/fa";
 
 export default function Assignments() {
   const { cid } = useParams();
-  const [isExpanded, setIsExpanded] = useState(true);
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
     return date.toLocaleDateString("en-US", {
@@ -39,12 +39,19 @@ export default function Assignments() {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const dispatch = useDispatch();
   const { assignments } = useSelector((state: RootState) => state.assignmentReducer);
-  const [assignmentToDelete, setAssignmentToDelete] = useState<string | null>(null);
 
-  // Helper to open/close modal
-  const confirmDelete = (assignmentId: string) =>
-    setAssignmentToDelete(assignmentId);
-  const handleClose = () => setAssignmentToDelete(null);
+  const fetchAssignments = async () => {
+    const assignments = await client.findAssignmentsForCourse(cid as string);
+    dispatch(setAssignments(assignments));
+  };
+  useEffect(() => {
+    fetchAssignments();
+  }, []);
+
+  const onRemoveAssignment = async (assignmentId: string) => {
+    await client.deleteAssignment(assignmentId);
+    dispatch(setAssignments(assignments.filter((a: any) => a._id !== assignmentId)));
+  };
   return (
     <div id="wd-assignments">
       <AssignmentControls />
@@ -63,10 +70,8 @@ export default function Assignments() {
             </FacultyRoute>
           </div>
 
-          {currentUser && 
-          isExpanded &&
+          {currentUser &&
             assignments
-              .filter((assignment: any) => assignment.course === cid)
               .map((assignment: any) => (
                 <ListGroup
                   className="wd-lessons rounded-0"
@@ -113,39 +118,12 @@ export default function Assignments() {
                         <Col xs="auto">
                           <FaTrash
                             className="text-danger me-2 mb-1"
-                            onClick={() => confirmDelete(assignment._id)}
+                            onClick={() => onRemoveAssignment(assignment._id)}
                           />
                           <LessonControlButtons />
                         </Col>
                       </FacultyRoute>
                     </Row>
-
-                    <Modal
-                      show={assignmentToDelete === assignment._id}
-                      onHide={handleClose}
-                    >
-                      <Modal.Header closeButton>
-                        <Modal.Title>Delete Assignment</Modal.Title>
-                      </Modal.Header>
-                      <Modal.Body>
-                        Are you sure you want to remove the assignment
-                        <b> {assignment.title}</b>?
-                      </Modal.Body>
-                      <Modal.Footer>
-                        <Button variant="secondary" onClick={handleClose}>
-                          Cancel
-                        </Button>
-                        <Button
-                          variant="danger"
-                          onClick={() => {
-                            dispatch(deleteAssignment(assignment._id));
-                            handleClose();
-                          }}
-                        >
-                          Confirm, Delete
-                        </Button>
-                      </Modal.Footer>
-                    </Modal>
                   </ListGroup.Item>
                 </ListGroup>
               ))}
