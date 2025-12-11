@@ -34,7 +34,7 @@ export default function AssignmentEditor() {
         );
     }, [aid, isNew, assignments]); // Adding dependencies
 
-    const handleSave = async (cid: any, assignment: any) => {
+    const handleSave = async (assignment: any) => {
         if (isNew) {
             await client.createAssigmentForCourse(cid, assignment);
             dispatch(addAssignment(assignment));
@@ -174,7 +174,7 @@ export default function AssignmentEditor() {
 
                 <div className="float-end mb-2 me-1">
                     <Link href={`/Courses/${cid}/Assignments`} className="btn btn-secondary me-2">Cancel</Link>
-                    <Button href={`/Courses/${cid}/Assignments`} onClick={() => handleSave(cid, assignment)} className="me-2" variant="danger">
+                    <Button href={`/Courses/${cid}/Assignments`} onClick={() => handleSave(assignment)} className="me-2" variant="danger">
                         Save
                     </Button>
                 </div>
