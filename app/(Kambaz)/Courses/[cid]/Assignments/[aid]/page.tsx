@@ -5,14 +5,16 @@ import { useParams, useRouter } from "next/navigation";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { addAssignment, updateAssignment} from "../reducer";
+import { setAssignments } from "../reducer";
 import * as client from "../../../client";
+
 
 export default function AssignmentEditor() {
     const dispatch = useDispatch();
+    const router = useRouter();
     const { cid, aid } = useParams();
 
-    const isNew = aid === "New";
+    let isNew = aid === "New";
 
     const newAssignment = {
         title: "New Assignment",
@@ -34,14 +36,19 @@ export default function AssignmentEditor() {
         );
     }, [aid, isNew, assignments]); // Adding dependencies
 
-    const handleSave = async (assignment: any) => {
+    const handleSave = async () => {
         if (isNew) {
-            await client.createAssigmentForCourse(cid, assignment);
-            dispatch(addAssignment(assignment));
+            if (!cid) {
+                return;
+            }
+            const newAssignment = await client.createAssigmentForCourse(cid, assignment);
+            dispatch(setAssignments([...assignments, newAssignment]));
         } else {
             await client.updateAssignment(assignment);
-            dispatch(updateAssignment(assignment));
+            const newAssignments = assignments.map((a: any) => a._id == assignment._id ? assignment : a);
+            dispatch(setAssignments(newAssignments));
         }
+        router.push(`/Courses/${cid}/Assignments`);
     }
 
     return (
@@ -174,7 +181,7 @@ export default function AssignmentEditor() {
 
                 <div className="float-end mb-2 me-1">
                     <Link href={`/Courses/${cid}/Assignments`} className="btn btn-secondary me-2">Cancel</Link>
-                    <Button href={`/Courses/${cid}/Assignments`} onClick={() => handleSave(assignment)} className="me-2" variant="danger">
+                    <Button onClick={() => handleSave()} className="me-2" variant="danger">
                         Save
                     </Button>
                 </div>
