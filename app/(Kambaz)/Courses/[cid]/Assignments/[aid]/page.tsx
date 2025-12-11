@@ -34,12 +34,12 @@ export default function AssignmentEditor() {
         );
     }, [aid, isNew, assignments]); // Adding dependencies
 
-    const handleSave = (cid: any, assignment: any) => {
+    const handleSave = async (cid: any, assignment: any) => {
         if (isNew) {
-            client.createAssigmentForCourse(cid, assignment);
+            await client.createAssigmentForCourse(cid, assignment);
             dispatch(addAssignment(assignment));
         } else {
-            client.updateAssignment(assignment);
+            await client.updateAssignment(assignment);
             dispatch(updateAssignment(assignment));
         }
     }
