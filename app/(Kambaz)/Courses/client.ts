@@ -47,7 +47,7 @@ export const deleteModule = async (moduleId: string) => {
 };
 
 export const updateModule = async (module: any) => {
-  const response = await axios.put(`${MODULES_API}/${module._id}`, module);
+  const response = await axiosWithCredentials.put(`${MODULES_API}/${module._id}`, module);
   return response.data;
 };
 
