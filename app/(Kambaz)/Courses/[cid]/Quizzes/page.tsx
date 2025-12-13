@@ -5,6 +5,7 @@ import { FaEllipsisV, FaCheckCircle } from "react-icons/fa";
 import * as client from "./client";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { FaBan } from "react-icons/fa6";
 
 export default function Quizzes() {
     const { cid } = useParams();
@@ -15,6 +16,29 @@ export default function Quizzes() {
 
     const fetchQuizzes = async () => {
         const quizzes = await client.findQuizzesForCourse(cid as string);
+
+        const quizzesWithQuestions = await Promise.all(
+            quizzes.map(async (quiz: any) => {
+                const questions = await client.findQuestionsForQuiz(quiz._id);
+                const totalPoints = questions.reduce((sum: number, q: any) => sum + (q.points || 0), 0);
+                
+                let latestAttempt = null;
+                if (!isFaculty) {
+                try {
+                    latestAttempt = await client.findLatestAttempt(quiz._id);
+                } catch (error) {
+                    
+                }
+                }
+                
+                return {
+                ...quiz,
+                questionCount: questions.length,
+                totalPoints: totalPoints,
+                latestAttempt: latestAttempt,
+                };
+            })
+        );
 
         const displayQuizzes = isFaculty ? quizzes : quizzes.filter((q: any) => q.published);
 
@@ -54,7 +78,7 @@ export default function Quizzes() {
     const onAddQuiz = async (quiz: any) => {
         const newQuiz = await client.createQuizForCourse(cid as string, quiz);
         fetchQuizzes();
-        router.push(`/Courses/${cid}/Quizzes/${newQuiz._id}/edit`);
+        router.push(`/Courses/${cid}/Quizzes/${newQuiz._id}/Edit`);
     };
 
     const onDeleteQuiz = async (quizId: string) => {
@@ -67,14 +91,68 @@ export default function Quizzes() {
         fetchQuizzes();
     }
 
-    console.log("quizzes: ", quizzes);
+    const getAvailabilityStatus = (quiz: any) => {
+        const now = new Date();
+        now.setHours(0, 0, 0, 0);
+        
+        const availableDate = new Date(quiz.availableDate);
+        availableDate.setHours(0, 0, 0, 0);
+        
+        const dueDate = new Date(quiz.dueDate);
+        dueDate.setHours(0, 0, 0, 0);
+        dueDate.setDate(dueDate.getDate() + 1);
+        
+        const untilDate = new Date(quiz.untilDate);
+        untilDate.setHours(0, 0, 0, 0);
+        untilDate.setDate(untilDate.getDate() + 1);
+
+        if (isFaculty) {
+            if (!quiz.published) {
+                return "Closed";
+            }
+            if (now >= dueDate) {
+                return "Closed";
+            }
+            return "Available";
+        }
+
+        if (!quiz.published) {
+        return "Closed";
+        }
+
+        if (now < availableDate) {
+            return `Not available until ${quiz.availableDate}`;
+        } else if (now >= dueDate) {
+            return "Closed";
+        } else if (now >= untilDate) {
+            return "Closed";
+        } else {
+            return "Available";
+        }
+    };
+
+    const isPastDueDate = (quiz: any) => {
+        const now = new Date();
+        now.setHours(0, 0, 0, 0);
+        const dueDate = new Date(quiz.dueDate);
+        dueDate.setHours(0, 0, 0, 0);
+        dueDate.setDate(dueDate.getDate() + 1);
+        return now >= dueDate;
+    };
+
+    const getQuizBorderStyle = (quiz: any) => {
+        if (isFaculty) return {};
+        if (quiz.latestAttempt) return { borderLeft: "4px solid #28a745" };
+        if (isPastDueDate(quiz)) return { borderLeft: "4px solid #dc3545" };
+        return {};
+    };
 
     return (
         <div id="wd-quizzes">
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <h2>Quizzes</h2>
                 {isFaculty && (
-                    <Button variant="danger" onClick={onAddQuiz}>
+                    <Button variant="danger" onClick={() => onAddQuiz(quiz)}>
                         + Quiz
                     </Button>
                 )}
@@ -86,47 +164,89 @@ export default function Quizzes() {
                     </p>
                 </div>
             )}
-            <div className="border rounded">
-                <div className="d-flex justify-content-between align-items-center p-3 border-bottom" style={{cursor: "pointer", borderLeft: "4px solid #28a745"}}>
-                    <div className="flex-grow-1">
-                        <div className="d-flex align-items-center mb-2">
-                            <FaCheckCircle className="text-success me-3 fs-5" />
-                            <h5 className="mb-0">
-                                Quiz Title
-                            </h5>
+            {quizzes.length > 0 && (
+                <div className="border rounded">
+                    {quizzes.map((quiz, index) => (
+                        <div key={quiz._id} className={`d-flex justify-content-between align-items-center p-3 ${
+                            index !== quizzes.length - 1 ? 'border-bottom' : ''
+                        }`}
+                        style={{ cursor: "pointer", ...getQuizBorderStyle(quiz) }}
+                        onClick={() => router.push(`/Courses/${cid}/Quizzes/${quiz._id}`)}
+                        >
+                            <div className="flex-grow-1">
+                                <div className="d-flex align-items-center mb-2">
+                                    {!isFaculty ? (
+                                        !quiz.latestAttempt && isPastDueDate(quiz) ? (
+                                        <span className="me-3 fs-4">⚠️</span>
+                                        ) : quiz.published ? (
+                                        <FaCheckCircle className="text-success me-3 fs-5" />
+                                        ) : (
+                                        <FaBan className="text-danger me-3 fs-5" />
+                                        )
+                                    ) : (
+                                        quiz.published ? (
+                                        <FaCheckCircle className="text-success me-3 fs-5" />
+                                        ) : (
+                                        <FaBan className="text-danger me-3 fs-5" />
+                                        )
+                                    )}
+                                    <h5 className="mb-0">{quiz.title}</h5>
+                                </div>
+                                <div className="text-muted small" style={{ marginLeft: "2.5rem" }}>
+                                    <span className="fw-semibold">{getAvailabilityStatus(quiz)}</span>
+                                    <span className="mx-2">|</span>
+                                    <span><strong>Due</strong> {quiz.dueDate}</span>
+                                    <span className="mx-2">|</span>
+                                    <span>{quiz.totalPoints} pts</span>
+                                    <span className="mx-2">|</span>
+                                    <span>{quiz.questionCount} Questions</span>
+                                    {!isFaculty && (
+                                        <>
+                                        <span className="mx-2">|</span>
+                                        {quiz.latestAttempt ? (
+                                            <>
+                                            <span className="text-success fw-semibold">Attempted</span>
+                                            <span className="mx-2">|</span>
+                                            <span className="fw-bold">Score: {quiz.latestAttempt.score}/{quiz.totalPoints}</span>
+                                            </>
+                                        ) : isPastDueDate(quiz) ? (
+                                            <>
+                                            <span className="text-danger fw-semibold">Not Attempted</span>
+                                            <span className="mx-2">|</span>
+                                            <span className="fw-bold text-danger">Score: 0/{quiz.totalPoints}</span>
+                                            </>
+                                        ) : (
+                                            <span className="text-muted fw-semibold">Not Attempted</span>
+                                        )}
+                                        </>
+                                    )}
+                                </div>
+                            </div>
+                            {isFaculty && (
+                                <Dropdown onClick={(e) => e.stopPropagation()}>
+                                    <Dropdown.Toggle variant="link" className="text-dark p-0">
+                                        <FaEllipsisV />
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu align="end">
+                                        <Dropdown.Item onClick={(e) => {
+                                        e.stopPropagation();
+                                        router.push(`/Courses/${cid}/Quizzes/${quiz._id}/Edit`);
+                                        }}>
+                                        Edit
+                                        </Dropdown.Item>
+                                        <Dropdown.Item onClick={(e) => onDeleteQuiz(quiz._id)}>
+                                        Delete
+                                        </Dropdown.Item>
+                                        <Dropdown.Item onClick={(e) => onPublishQuiz(quiz._id)}>
+                                        {quiz.published ? "Unpublish" : "Publish"}
+                                        </Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            )}
                         </div>
-                        <div className="text-muted small" style={{ marginLeft: "2.5rem" }}>
-                            <span className="fw-semibold">Available</span>
-                            <span className="mx-2">|</span>
-                            <span><strong>Due</strong> 2025-12-14</span>
-                            <span className="mx-2">|</span>
-                            <span>100 pts</span>
-                            <span className="mx-2">|</span>
-                            <span>10 Questions</span>
-                            {/* <>
-                                <span className="mx-2">|</span>
-                                <span className="text-muted fw-semibold">Not Attempted</span>
-                            </> */}
-                        </div>
-                    </div>
-                    <Dropdown>
-                        <Dropdown.Toggle variant="link" className="text-dark p-0">
-                            <FaEllipsisV />
-                        </Dropdown.Toggle>
-                        <Dropdown.Menu align="end">
-                            <Dropdown.Item>
-                                Edit
-                            </Dropdown.Item>
-                            <Dropdown.Item>
-                                Delete
-                            </Dropdown.Item>
-                            <Dropdown.Item>
-                                Published
-                            </Dropdown.Item>
-                        </Dropdown.Menu>
-                    </Dropdown>
+                    ))}
                 </div>
-            </div>
+            )}
         </div>
-    );
+    )
 }
