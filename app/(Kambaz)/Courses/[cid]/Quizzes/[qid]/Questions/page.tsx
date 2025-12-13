@@ -196,7 +196,7 @@ export default function QuestionsEditor() {
 
   useEffect(() => {
     if (activeTab === "details") {
-      router.push(`/Courses/${cid}/Quizzes/${qid}/edit`);
+      router.push(`/Courses/${cid}/Quizzes/${qid}/Edit`);
     }
   }, [activeTab]);
 

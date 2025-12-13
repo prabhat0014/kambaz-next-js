@@ -103,7 +103,7 @@ export default function QuizEditor() {
 
     useEffect(() => {
         if (activeTab === "questions") {
-            router.push(`/Courses/${cid}/Quizzes/${qid}/questions`);
+            router.push(`/Courses/${cid}/Quizzes/${qid}/Questions`);
         }
     }, [activeTab]);
 

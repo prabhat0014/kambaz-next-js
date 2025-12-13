@@ -384,7 +384,7 @@ export default function QuizPreview() {
             );
           })}
 
-          <Button variant="secondary" onClick={() => router.push(`/Courses/${cid}/Quizzes/${qid}/edit`)}>
+          <Button variant="secondary" onClick={() => router.push(`/Courses/${cid}/Quizzes/${qid}/Edit`)}>
             Edit Quiz
           </Button>
         </>
