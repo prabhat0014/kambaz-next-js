@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
-import { enrollCourse, unenrollCourse, setCourses, setEnrollements } from "../Courses/reducer";
+import { setCourses, setUserEnrollments } from "../Courses/reducer";
 import FacultyRoute from "../Account/FacultyRoute";
 import {
   Row,
@@ -23,9 +23,9 @@ export default function Dashboard() {
       dispatch(setCourses(courses));
       const userEnrollments = await client.findMyCourses();
       if (userEnrollments !== null) {
-        dispatch(setEnrollements(userEnrollments));
+        dispatch(setUserEnrollments(userEnrollments));
       } else {
-        dispatch(setEnrollements([]));
+        dispatch(setUserEnrollments([]));
       }
     } catch (error) {
       console.log(error);
@@ -36,8 +36,8 @@ export default function Dashboard() {
   }, [currentUser]);
   const dispatch = useDispatch();
   const [course, setCourse] = useState<any>({
-    _id: "0", name: "New Course", number: "New Number", startDate: "2023-09-10", endDate: "2023-12-15",
-    image: "/images/reactjs.jpg", description: "New Description"
+    name: "New Course", number: "RS4550", startDate: "2023-09-10", endDate: "2023-12-15",
+    image: "../images/reactjs.jpg", description: "New Description", department: "D123", credits: 4, modules: []
   });
   const [showEnrolled, setShowEnrolled] = useState(true);
   const isEnrolled = (courseId: string) => {
@@ -47,25 +47,29 @@ export default function Dashboard() {
     return userEnrollments.some((course: any) => course._id === courseId);
   };
 
-  const onAddNewCourse = async () => {
-    const newCourse = await client.createCourse(course);
-    dispatch(setCourses([ ...courses, newCourse ]));
+  const onAddNewCourse = async (course: any) => {
+    await client.createCourse(course);
+    fetchCourses();
   };
 
   const onDeleteCourse = async (courseId: string) => {
-    const status = await client.deleteCourse(courseId);
-    dispatch(setCourses(courses.filter((course) => course._id !== courseId)));
+    await client.deleteCourse(courseId);
+    fetchCourses();
   };
 
-  const onUpdateCourse = async () => {
-    await client.updateCourse(course);
-    dispatch(setCourses(courses.map((c) => {
-      if (c._id === course._id) { 
-        return course; 
-      } else { 
-        return c;
-      }
-    })));
+  const onEnrollCourse = async (course: any) => {
+    await client.enrollCourse(course);
+    fetchCourses();
+  }
+
+  const onDeEnrollCourse = async (course: any) => {
+    await client.deEnrollCourse(course);
+    fetchCourses();
+  }
+
+  const onUpdateCourse = async (course: any) => {
+    client.updateCourse(course);
+    fetchCourses();
   };
 
   return (
@@ -76,11 +80,11 @@ export default function Dashboard() {
           New Course
           <button className="btn btn-primary float-end"
             id="wd-add-new-course-click"
-            onClick={() => {onAddNewCourse}} >
+            onClick={() => {onAddNewCourse(course)}} >
             Add
           </button>
           <button className="btn btn-warning float-end me-2"
-            onClick={onUpdateCourse} id="wd-update-course-click">
+            onClick={() => onUpdateCourse(course)} id="wd-update-course-click">
             Update
           </button>
           <br /><br />
@@ -136,9 +140,9 @@ export default function Dashboard() {
                           onClick={(event) => {
                             event.preventDefault();
                             if (isEnrolled(course._id)) {
-                              dispatch(unenrollCourse({ userId: (currentUser as any)?._id, courseId: course._id }));
+                              onDeEnrollCourse(course);
                             } else {
-                              dispatch(enrollCourse({ userId: (currentUser as any)?._id, courseId: course._id }));
+                              onEnrollCourse(course);
                             }
                           }}>
                           {isEnrolled(course._id) ? "Unenroll" : "Enroll"}

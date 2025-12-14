@@ -56,6 +56,7 @@ export const updateQuestion = async (questionId: string, question: any) => {
 };
 
 export const findLatestAttempt = async (quizId: string) => {
+  console.log("qid: ", quizId);
   const response = await axiosWithCredentials.get(`${QUIZZES_API}/${quizId}/attempts/latest`);
   return response.data;
 };

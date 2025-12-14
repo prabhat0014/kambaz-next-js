@@ -60,18 +60,18 @@ export default function TakeQuiz() {
           submittedAt: new Date().toISOString(),
         };
         await quizzesClient.submitQuizAttempt(qid as string, zeroAttempt);
-        router.push(`/Courses/${cid}/Quizzes/${qid}/results`);
+        router.push(`/Courses/${cid}/Quizzes/${qid}/Results`);
         return;
       } else if (now >= dueDate && attemptsData.length > 0) {
-        router.push(`/Courses/${cid}/Quizzes/${qid}/results`);
+        router.push(`/Courses/${cid}/Quizzes/${qid}/Results`);
         return;
       }
       
       if (!quizData.multipleAttempts && attemptsData.length >= 1) {
-        router.push(`/Courses/${cid}/Quizzes/${qid}/results`);
+        router.push(`/Courses/${cid}/Quizzes/${qid}/Results`);
         return;
       } else if (quizData.multipleAttempts && attemptsData.length >= quizData.howManyAttempts) {
-        router.push(`/Courses/${cid}/Quizzes/${qid}/results`);
+        router.push(`/Courses/${cid}/Quizzes/${qid}/Results`);
         return;
       }
     } catch (error) {
@@ -90,7 +90,7 @@ export default function TakeQuiz() {
           submittedAt: new Date().toISOString(),
         };
         await quizzesClient.submitQuizAttempt(qid as string, zeroAttempt);
-        router.push(`/Courses/${cid}/Quizzes/${qid}/results`);
+        router.push(`/Courses/${cid}/Quizzes/${qid}/Results`);
       }
     }
   };
@@ -247,7 +247,7 @@ export default function TakeQuiz() {
     };
 
     await quizzesClient.submitQuizAttempt(qid as string, attempt);
-    router.push(`/Courses/${cid}/Quizzes/${qid}/results`);
+    router.push(`/Courses/${cid}/Quizzes/${qid}/Results`);
   };
 
   const renderQuestionText = (questionText: string) => {

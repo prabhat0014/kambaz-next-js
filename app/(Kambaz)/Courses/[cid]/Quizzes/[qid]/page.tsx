@@ -53,7 +53,7 @@ export default function Quiz() {
     const dueDate = new Date(quiz.dueDate);
     dueDate.setHours(0, 0, 0, 0);
     dueDate.setDate(dueDate.getDate() + 1);
-    return now >= dueDate;
+    return now > dueDate;
   };
 
   const totalPoints = questions.reduce((sum, q) => sum + q.points, 0);
@@ -178,7 +178,7 @@ export default function Quiz() {
               {!isPastDueDate() && quiz.multipleAttempts && latestAttempt.attempt < quiz.howManyAttempts && (
                 <Button 
                   variant="secondary" 
-                  onClick={() => router.push(`/Courses/${cid}/Quizzes/${qid}/TakeQuiz`)}
+                  onClick={() => router.push(`/Courses/${cid}/Quizzes/${qid}/Take`)}
                 >
                   Retake Quiz ({latestAttempt.attempt}/{quiz.howManyAttempts} attempts)
                 </Button>
@@ -191,7 +191,7 @@ export default function Quiz() {
           ) : (
             <Button 
               variant="danger" 
-              onClick={() => router.push(`/Courses/${cid}/Quizzes/${qid}/TakeQuiz`)}
+              onClick={() => router.push(`/Courses/${cid}/Quizzes/${qid}/Take`)}
             >
               Take Quiz
             </Button>

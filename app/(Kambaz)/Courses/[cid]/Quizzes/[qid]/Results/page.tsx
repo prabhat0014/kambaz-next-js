@@ -34,10 +34,8 @@ export default function QuizResults() {
         setAllAttempts(allAttemptsData);
         setNoAttempt(false);
       } catch (error) {
-        // No attempt - student never took the quiz
         setNoAttempt(true);
       }
-      
       setLoading(false);
     } catch (error) {
       console.error("Error fetching results:", error);
@@ -57,7 +55,6 @@ export default function QuizResults() {
     ? Math.max(...allAttempts.map((a: any) => a.score))
     : 0;
 
-  // Handle case where student never attempted the quiz
   if (noAttempt) {
     return (
       <div id="wd-quiz-results" className="p-3">
@@ -263,7 +260,7 @@ export default function QuizResults() {
       )}
 
       {!isPastDueDate() && quiz.multipleAttempts && latestAttempt.attempt < quiz.howManyAttempts && (
-        <Button variant="primary" onClick={() => router.push(`/Courses/${cid}/Quizzes/${qid}/take`)}>
+        <Button variant="primary" onClick={() => router.push(`/Courses/${cid}/Quizzes/${qid}/Take`)}>
           Take Quiz Again
         </Button>
       )}

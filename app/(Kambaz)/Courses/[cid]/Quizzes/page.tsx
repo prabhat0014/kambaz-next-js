@@ -24,11 +24,11 @@ export default function Quizzes() {
                 
                 let latestAttempt = null;
                 if (!isFaculty) {
-                try {
-                    latestAttempt = await client.findLatestAttempt(quiz._id);
-                } catch (error) {
-                    
-                }
+                    try {
+                        latestAttempt = await client.findLatestAttempt(quiz._id);
+                    } catch (error) {
+                        console.log(error);
+                    }
                 }
                 
                 return {
@@ -40,7 +40,7 @@ export default function Quizzes() {
             })
         );
 
-        const displayQuizzes = isFaculty ? quizzes : quizzes.filter((q: any) => q.published);
+        const displayQuizzes = isFaculty ? quizzesWithQuestions : quizzesWithQuestions.filter((q: any) => q.published);
 
         const sortedQuizzes = displayQuizzes.sort((a: any, b: any) => {
             const dueDateA = new Date(a.dueDate).getTime();
@@ -106,11 +106,14 @@ export default function Quizzes() {
         untilDate.setHours(0, 0, 0, 0);
         untilDate.setDate(untilDate.getDate() + 1);
 
+        console.log(`quiz: ${quiz}, now: ${now}, dueDate: ${dueDate}`);
+
         if (isFaculty) {
             if (!quiz.published) {
                 return "Closed";
             }
-            if (now >= dueDate) {
+            if (now > dueDate) {
+                console.log("true");
                 return "Closed";
             }
             return "Available";
@@ -122,9 +125,9 @@ export default function Quizzes() {
 
         if (now < availableDate) {
             return `Not available until ${quiz.availableDate}`;
-        } else if (now >= dueDate) {
+        } else if (now > dueDate) {
             return "Closed";
-        } else if (now >= untilDate) {
+        } else if (now > untilDate) {
             return "Closed";
         } else {
             return "Available";
