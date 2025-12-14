@@ -17,7 +17,7 @@ export default function Modules() {
   const dispatch = useDispatch();
   const fetchModules = async () => {
     const modules = await client.findModulesForCourse(cid as string);
-    dispatch(setModules(modules));
+    dispatch(setModules(modules.map((m: any) => ({ ...m, editing: false }))));
   };
   useEffect(() => {
     fetchModules();
@@ -28,23 +28,29 @@ export default function Modules() {
       return;
     }
     const newModule = { name: moduleName, course: cid };
-    const module = await client.createModuleForCourse(cid as string, newModule);
-    dispatch(setModules([...modules, module]));
+    await client.createModuleForCourse(cid as string, newModule);
+    fetchModules();
   };
 
   const onRemoveModule = async (moduleId: string) => {
-    const status = await client.deleteModule(cid as string, moduleId);
-    console.log(status);
-    const newModules = modules.filter((m: any) => m._id !== moduleId);
-    dispatch(setModules(newModules));
+    await client.deleteModule(cid as string, moduleId);
+    fetchModules();
   };
 
   const onUpdateModule = async (module: any) => {
-    const updatedModule = await client.updateModule(cid as string, module);
-    const newModules = modules.map((m: any) => m._id === module._id ? updatedModule : m );
-    dispatch(setModules(newModules));
+    await client.updateModule(cid as string, module);
+    fetchModules();
   };
 
+  const setModuleForEdit = (moduleId: any, value: boolean) => {
+    const newModules = modules.map((m: any) => m._id === moduleId ? {...m, editing: value}: m);
+    dispatch(setModules(newModules));
+  }
+
+  const changeModuleName = (moduleId: string, newName: string) => {
+    const newModules = modules.map((m: any) => m._id === moduleId ? {...m, name: newName}: m);
+    dispatch(setModules(newModules));
+  }
 
   return (
     <div>
@@ -61,17 +67,19 @@ export default function Modules() {
                 <BsGripVertical className="me-2 fs-3" />
                 {!module.editing && module.name}
                 { module.editing && (
+
                   <FormControl className="w-50 d-inline-block"
-                        onChange={(e) => dispatch(updateModule({ ...module, name: e.target.value }))}
+                        onChange={(e) => changeModuleName(module._id, e.target.value)}
                         onKeyDown={(e) => {
                           if (e.key === "Enter") {
+                            setModuleForEdit(module._id, false);
                             onUpdateModule({...module, editing: false});
                           }
                         }}
                         defaultValue={module.name}/>
                 )}
                 <ModuleControlButtons moduleId={module._id}
-                editModule={(moduleId) => dispatch(editModule(moduleId))}
+                setModuleForEdit={(moduleId) => setModuleForEdit(moduleId, true)}
                 deleteModule={(moduleId) => onRemoveModule(moduleId)} />
               </div>
               {module.lessons && (
